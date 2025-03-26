@@ -19,6 +19,7 @@ import Sync from "./Pages/Sync";
 import CastCrew from "./Pages/CastCrew";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import TermsConditions from "./Pages/TermsConditions";
+import Cart from "./Pages/Cart";
 import PaymentGuide from "./Pages/PaymentGuide";
 import Careers from "./Pages/Careers";
 import StoreAddresses from "./Pages/StoreAddresses";
@@ -29,7 +30,6 @@ import New from "./Pages/New";
 import DeliveryOrders from "./customer-service/DeliveryOrders";
 import ReturnsExchanges from "./customer-service/ReturnsExchanges";
 import TrackOrder from "./customer-service/TrackOrder";
-
 
 
 import "./index.css"
@@ -45,6 +45,7 @@ const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "men", element: <Men /> },
       { path: "women", element: <Women /> },
+      { path: "cart", element: <Cart /> },
       { path: "new", element: <New /> },
       { path: "delivery-orders", element: <DeliveryOrders /> },
       { path: "returns-exchanges", element: <ReturnsExchanges /> },
