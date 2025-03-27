@@ -1,110 +1,157 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaShoppingCart, FaSearch } from "react-icons/fa";
-import { PiMoonStarsFill } from "react-icons/pi";
+import React, { useState, useEffect, memo } from 'react';
+import { Link } from 'react-router-dom';
+import { FaShoppingCart, FaSearch } from 'react-icons/fa';
+import { useCart } from '../context/CartContext';
+import PropTypes from 'prop-types';
 
-const Navbar = () => {
-  const [cartCount, setCartCount] = useState(0);
-  const [cartItems, setCartItems] = useState([]);
+const Navbar = ({ onSearchClick = () => {}, onThemeToggle = () => {} }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { cartCount } = useCart();
 
-  // Load cart from localStorage on component mount
+  // Add scroll effect to navbar
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      const parsedCart = JSON.parse(savedCart);
-      setCartItems(parsedCart);
-      updateCartCount(parsedCart);
-    }
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Update cart count whenever cartItems change
-  const updateCartCount = (items) => {
-    const count = items.reduce((total, item) => total + item.quantity, 0);
-    setCartCount(count);
-  };
-
-  // Function to add to cart (could be called from product pages)
-  const addToCart = (product) => {
-    const existingItem = cartItems.find(item => item.id === product.id);
-    let updatedCart;
-    
-    if (existingItem) {
-      updatedCart = cartItems.map(item =>
-        item.id === product.id 
-          ? { ...item, quantity: item.quantity + 1 } 
-          : item
-      );
-    } else {
-      updatedCart = [...cartItems, { ...product, quantity: 1 }];
-    }
-
-    setCartItems(updatedCart);
-    updateCartCount(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+  // Navigation data
+  const navData = {
+    topLinks: [
+      { path: '/signin', text: 'Sign In' },
+      { path: '/tracking', text: 'Tracking Info' },
+      { path: '/corporate', text: 'Corporate Inquiry' },
+      { path: '/account', text: 'Create an Account' }
+    ],
+    mainLinks: [
+      { path: '/new', text: 'New' },
+      { path: '/sync', text: 'Sync', className: 'tracking-widest' },
+      { path: '/cast-crew', text: 'Cast & Crew', className: 'text-gold-500 font-light' },
+      { path: '/featured', text: 'Featured', className: 'text-red-600 font-bold' },
+      { path: '/collection', text: 'Collection', className: 'text-red-600 font-bold' }
+    ],
+    categoryLinks: [
+      { path: '/women', text: 'Women' },
+      { path: '/men', text: 'Men' },
+      { path: '/boys-girls', text: 'Boys & Girls' },
+      { path: '/fragrances', text: 'Fragrances' },
+      { path: '/makeup', text: 'Makeup' },
+      { path: '/skincare', text: 'Skincare' },
+      { text: 'New', className: 'text-red-600' }
+    ]
   };
 
   return (
-    <>
-      <header className="w-full sticky top-0 left-0 bg-white z-50">
-        {/* Top Bar */}
+    <header className={`w-full sticky top-0 left-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'}`}>
+      <div className="container mx-auto px-4">
+        {/* Top Links */}
         <div className="flex justify-between items-center text-xs text-gray-700 p-2 uppercase">
-          <div className="flex space-x-4">
-            <Link to="/signin">Sign In</Link>
-            <Link to="/tracking">Tracking Info</Link>
-            <Link to="/corporate">Corporate Inquiry</Link>
-            <Link to="/account">Create an Account</Link>
+          <div className="flex flex-wrap gap-x-4">
+            {navData.topLinks.map((link, index) => (
+              <Link 
+                key={`top-${index}`}
+                to={link.path}
+                className="hover:text-gray-900 transition-colors duration-200"
+              >
+                {link.text}
+              </Link>
+            ))}
           </div>
-          {/* Ramadan Icon */}
-          <div className="flex items-center space-x-2">
-            <PiMoonStarsFill className="text-green-600 text-lg" />
+          
+          <div className="flex items-center gap-x-4">
+            <button 
+              onClick={onThemeToggle}
+              aria-label="Toggle theme"
+              className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              {/* Theme toggle icon would go here */}
+            </button>
           </div>
         </div>
 
-        {/* Main Navbar */}
+        {/* Main Navigation */}
         <nav className="flex flex-col items-center py-0">
-          {/* Navigation Links */}
-          <div className="flex space-x-6 text-sm uppercase">
-            <Link to="/new">New</Link>
-            <Link to="/sync" className="tracking-widest">Sync</Link>
-            <Link to="/cast-crew" className="text-gold-500 font-light">Cast & Crew</Link>
-            <Link to="/featured" className="text-red-600 font-bold">Featured</Link>
-            <Link to="/collection" className="text-red-600 font-bold">Collection</Link>
+          {/* Primary Navigation */}
+          <div className="flex flex-wrap justify-center gap-x-6 text-sm uppercase py-2">
+            {navData.mainLinks.map((link, index) => (
+              <Link
+                key={`main-${index}`}
+                to={link.path}
+                className={`hover:text-gray-900 transition-colors ${link.className || ''}`}
+              >
+                {link.text}
+              </Link>
+            ))}
           </div>
 
           {/* Logo */}
           <div className="my-2">
-            <Link to="/">
-              <img src="/J.-logo.webp" alt="J. Logo" className="h-14" />
+            <Link to="/" aria-label="Home">
+              <img 
+                src="/J.-logo.webp" 
+                alt="J. Logo" 
+                className="h-14 w-auto" 
+                width={56}
+                height={56}
+                loading="eager"
+              />
             </Link>
           </div>
 
-          {/* Category Links */}
-          <div className="flex space-x-6 text-sm uppercase">
-            <Link to="/women">Women</Link>
-            <Link to="/men">Men</Link>
-            <Link to="/boys-girls">Boys & Girls</Link>
-            <Link to="/fragrances">Fragrances</Link>
-            <Link to="/makeup">Makeup</Link>
-            <Link to="/skincare">Skincare</Link>
-            <span className="text-red-600">New</span>
+          {/* Category Navigation */}
+          <div className="flex flex-wrap justify-center gap-x-6 text-sm uppercase py-2">
+            {navData.categoryLinks.map((link, index) => (
+              link.path ? (
+                <Link
+                  key={`category-${index}`}
+                  to={link.path}
+                  className={`hover:text-gray-900 transition-colors ${link.className || ''}`}
+                >
+                  {link.text}
+                </Link>
+              ) : (
+                <span key={`category-${index}`} className={link.className}>
+                  {link.text}
+                </span>
+              )
+            ))}
           </div>
         </nav>
 
-        {/* Icons */}
-        <div className="absolute right-5 top-5 flex space-x-4 text-xl">
-          <Link to="/cart" className="relative">
-            <FaShoppingCart className="cursor-pointer" />
+        {/* Action Buttons */}
+        <div className="absolute right-5 top-5 flex gap-x-4 text-xl">
+          <button 
+            onClick={onSearchClick}
+            aria-label="Search"
+            className="p-1 hover:text-gray-700 transition-colors"
+          >
+            <FaSearch />
+          </button>
+          
+          <Link 
+            to="/cart" 
+            className="relative p-1 hover:text-gray-700 transition-colors"
+            aria-label={`Cart (${cartCount} items)`}
+          >
+            <FaShoppingCart />
             {cartCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {cartCount}
+                {cartCount > 9 ? '9+' : cartCount}
               </span>
             )}
           </Link>
-          <FaSearch className="cursor-pointer" />
         </div>
-      </header>
-    </>
+      </div>
+    </header>
   );
 };
 
-export default Navbar;
+Navbar.propTypes = {
+  onSearchClick: PropTypes.func,
+  onThemeToggle: PropTypes.func
+};
+
+export default memo(Navbar);

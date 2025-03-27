@@ -1,91 +1,270 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram, FaPinterest, FaLinkedinIn } from "react-icons/fa";
+import { 
+  FaFacebookF, 
+  FaTwitter, 
+  FaYoutube, 
+  FaInstagram, 
+  FaPinterest, 
+  FaLinkedinIn,
+  FaPhoneAlt,
+  FaEnvelope
+} from "react-icons/fa";
+import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Footer() {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      toast.success("Thank you for subscribing!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+      setEmail("");
+      setIsSubmitting(false);
+    }, 1000);
+  };
+
+  const socialLinks = [
+    { icon: <FaFacebookF />, color: "hover:text-blue-600", url: "#" },
+    { icon: <FaTwitter />, color: "hover:text-blue-400", url: "#" },
+    { icon: <FaYoutube />, color: "hover:text-red-500", url: "#" },
+    { icon: <FaInstagram />, color: "hover:text-pink-500", url: "#" },
+    { icon: <FaPinterest />, color: "hover:text-red-600", url: "#" },
+    { icon: <FaLinkedinIn />, color: "hover:text-blue-700", url: "#" }
+  ];
+
+  const footerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
-    <footer className=" text-gray-700 py-10 px-5">
-      <div className="bg-[#232323] text-white py-12 px-4 flex flex-col justify-start bg-left-top bg-cover mb-10 bg-no-repeat bg-scroll border border-none rounded-none p-2.5 text-center ">
-        <h3 className="text-2xl font-semibold">BE THE FIRST</h3>
-        <p className="max-w-xl mx-auto mt-2">
+    <footer className="bg-white text-gray-700 pt-10 px-5">
+      <ToastContainer />
+      
+      {/* Newsletter Section */}
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={footerVariants}
+        className="bg-[#232323] text-white py-12 px-6 rounded-lg mb-10 text-center"
+      >
+        <h3 className="text-2xl md:text-3xl font-semibold mb-4">BE THE FIRST TO KNOW</h3>
+        <p className="max-w-xl mx-auto text-gray-300">
           New arrivals. Exclusive previews. First access to sales. Sign up to stay in the know.
         </p>
-        <div className="mt-6 flex justify-center">
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col sm:flex-row justify-center max-w-md mx-auto">
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email address"
-            className="p-3 border text-black border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-yellow-400 w-64 md:w-96"
+            className="p-3 border text-gray-900 border-gray-300 rounded sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-yellow-400 flex-grow"
+            required
           />
-          <button className="bg-black text-white px-6 py-3 rounded-r-md hover:bg-gray-800 transition-colors">
-            Sign Up
-          </button>
-        </div>
-      </div>
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="submit"
+            disabled={isSubmitting}
+            className="bg-black text-white px-6 py-3 mt-2 sm:mt-0 sm:rounded-l-none rounded hover:bg-gray-800 transition-colors"
+          >
+            {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+          </motion.button>
+        </form>
+      </motion.div>
 
+      {/* Main Footer Content */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
         {/* Need Help */}
-        <div>
-          <h3 className="font-semibold text-lg mb-3">NEED HELP?</h3>
-          <p className="flex items-center gap-2">📞 +92 21 111 112 111</p>
-          <p className="text-sm">(Mon - Sat: 9:30am - 7:30pm | Sun: 11am - 5pm)</p>
-          <p className="flex items-center gap-2 mt-2">📧 eshop@junaidjamshed.com</p>
-        </div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={footerVariants}
+          transition={{ delay: 0.1 }}
+        >
+          <h3 className="font-semibold text-lg mb-4">NEED HELP?</h3>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <FaPhoneAlt className="mt-1 text-gray-500" />
+              <div>
+                <p className="font-medium">+92 21 111 112 111</p>
+                <p className="text-sm text-gray-500">(Mon-Sat: 9:30am-7:30pm | Sun: 11am-5pm)</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <FaEnvelope className="text-gray-500" />
+              <p className="font-medium">eshop@junaidjamshed.com</p>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Catalogue */}
-        <div>
-          <h3 className="font-semibold text-lg mb-3">CATALOGUE</h3>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/men" className="hover:text-gray-500">Men</Link></li>
-            <li><Link to="/women" className="hover:text-gray-500">Women</Link></li>
-            <li><Link to="/kids" className="hover:text-gray-500">Kids</Link></li>
-            <li><Link to="/fragrances" className="hover:text-gray-500">Fragrances</Link></li>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={footerVariants}
+          transition={{ delay: 0.2 }}
+        >
+          <h3 className="font-semibold text-lg mb-4">CATALOGUE</h3>
+          <ul className="space-y-3">
+            {['Men', 'Women', 'Kids', 'Fragrances'].map((item) => (
+              <motion.li 
+                key={item}
+                whileHover={{ x: 5 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <Link 
+                  to={`/${item.toLowerCase()}`} 
+                  className="text-gray-600 hover:text-black transition-colors"
+                >
+                  {item}
+                </Link>
+              </motion.li>
+            ))}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Customer Service */}
-        <div>
-          <h3 className="font-semibold text-lg mb-3">CUSTOMER SERVICE</h3>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/contact" className="hover:text-gray-500">Contact Us</Link></li>
-            <li><Link to="/delivery-orders" className="hover:text-gray-500">Delivery & Orders</Link></li>
-            <li><Link to="/returns-exchanges" className="hover:text-gray-500">Returns & Exchanges</Link></li>
-            <li><Link to="/terms-conditions" className="hover:text-gray-500">Terms & Conditions</Link></li>
-            <li><Link to="/privacy-policy" className="hover:text-gray-500">Privacy Policy</Link></li>
-            <li><Link to="/track-order" className="hover:text-gray-500">Track My Order</Link></li>
-            <li><Link to="/payment-guide" className="hover:text-gray-500">Payment Guide</Link></li>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={footerVariants}
+          transition={{ delay: 0.3 }}
+        >
+          <h3 className="font-semibold text-lg mb-4">CUSTOMER SERVICE</h3>
+          <ul className="space-y-3">
+            {[
+              'Contact Us',
+              'Delivery & Orders',
+              'Returns & Exchanges',
+              'Terms & Conditions',
+              'Privacy Policy',
+              'Track My Order',
+              'Payment Guide'
+            ].map((item) => (
+              <motion.li 
+                key={item}
+                whileHover={{ x: 5 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <Link 
+                  to={`/${item.toLowerCase().replace(/ & | /g, '-')}`} 
+                  className="text-gray-600 hover:text-black transition-colors"
+                >
+                  {item}
+                </Link>
+              </motion.li>
+            ))}
           </ul>
-
-        </div>
+        </motion.div>
 
         {/* Company */}
-        <div>
-          <h3 className="font-semibold text-lg mb-3">COMPANY</h3>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/about" className="hover:text-gray-500">About Us</Link></li>
-            <li><Link to="/" className="hover:text-gray-500">Careers</Link></li>
-            <li><Link to="/" className="hover:text-gray-500">Store Addresses</Link></li>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={footerVariants}
+          transition={{ delay: 0.4 }}
+        >
+          <h3 className="font-semibold text-lg mb-4">COMPANY</h3>
+          <ul className="space-y-3">
+            {['About Us', 'Careers', 'Store Addresses'].map((item) => (
+              <motion.li 
+                key={item}
+                whileHover={{ x: 5 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <Link 
+                  to={`/${item.toLowerCase().replace(' ', '-')}`} 
+                  className="text-gray-600 hover:text-black transition-colors"
+                >
+                  {item}
+                </Link>
+              </motion.li>
+            ))}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Follow Us */}
-        <div>
-          <h3 className="font-semibold text-lg mb-3">FOLLOW US</h3>
-          <div className="flex space-x-4 text-xl">
-            <a href="#" className="hover:text-blue-600"><FaFacebookF /></a>
-            <a href="#" className="hover:text-blue-400"><FaTwitter /></a>
-            <a href="#" className="hover:text-red-500"><FaYoutube /></a>
-            <a href="#" className="hover:text-pink-500"><FaInstagram /></a>
-            <a href="#" className="hover:text-red-600"><FaPinterest /></a>
-            <a href="#" className="hover:text-blue-700"><FaLinkedinIn /></a>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={footerVariants}
+          transition={{ delay: 0.5 }}
+        >
+          <h3 className="font-semibold text-lg mb-4">FOLLOW US</h3>
+          <div className="flex flex-wrap gap-4 text-xl">
+            {socialLinks.map((social, index) => (
+              <motion.a
+                key={index}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`p-2 rounded-full bg-gray-100 ${social.color} transition-colors`}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                {social.icon}
+              </motion.a>
+            ))}
           </div>
-        </div>
-
+          {/* <div className="mt-6">
+            <h4 className="font-medium mb-2">DOWNLOAD OUR APP</h4>
+            <div className="flex gap-2">
+              <motion.img
+                src="/app-store-badge.svg"
+                alt="Download on the App Store"
+                className="h-10 cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+              />
+              <motion.img
+                src="/google-play-badge.png"
+                alt="Get it on Google Play"
+                className="h-10 cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+              />
+            </div>
+          </div> */}
+        </motion.div>
       </div>
 
       {/* Bottom Line */}
-      <div className="text-center text-sm text-gray-500 mt-8 border-t pt-4">
-        &copy; {new Date().getFullYear()} J. | All Rights Reserved.
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="text-center text-sm text-gray-500 mt-12 border-t pt-6 pb-4"
+      >
+        <p>&copy; {new Date().getFullYear()} Junaid Jamshed. All Rights Reserved.</p>
+        <div className="flex justify-center gap-4 mt-2">
+          <Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link>
+          <Link to="/terms-conditions" className="hover:underline">Terms of Service</Link>
+          <Link to="/signin" className="hover:underline">SignIn</Link>
+        </div>
+      </motion.div>
     </footer>
   );
 }
