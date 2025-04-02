@@ -162,7 +162,7 @@ const SignIn = () => {
         <div className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{" "}
           <a 
-            href="/signup" 
+            href="/account" 
             className="font-medium text-black hover:underline focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 rounded"
           >
             Sign up

@@ -14,8 +14,7 @@ import CreateAccount from "./Pages/CreateAccount";
 import TrackingInfo from "./Pages/TrackingInfo";
 import CorporateInquiry from "./Pages/CorporateInquiry";
 import Featured from "./Pages/Featured";
-import Collection from "./Pages/Collection";
-import Sync from "./Pages/Sync";
+import syncc from "./Pages/Syncc";
 import CastCrew from "./Pages/CastCrew";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import TermsConditions from "./Pages/TermsConditions";
@@ -30,9 +29,8 @@ import New from "./Pages/New";
 import DeliveryOrders from "./customer-service/DeliveryOrders";
 import ReturnsExchanges from "./customer-service/ReturnsExchanges";
 import TrackOrder from "./customer-service/TrackOrder";
-
-
 import "./index.css"
+import Syncc from "./Pages/Syncc";
 
 // Define the router in a variable
 const router = createBrowserRouter([
@@ -59,8 +57,7 @@ const router = createBrowserRouter([
       { path: "account", element: <CreateAccount /> },
       { path: "tracking", element: <TrackingInfo /> },
       { path: "corporate", element: <CorporateInquiry /> },
-      { path: "collection", element: <Collection /> },
-      { path: "sync", element: <Sync /> },
+      { path: "syncc", element: <Syncc /> },
       { path: "cast-crew", element: <CastCrew /> },
       { path: "privacy-policy", element: <PrivacyPolicy /> },
       { path: "terms-conditions", element: <TermsConditions /> },

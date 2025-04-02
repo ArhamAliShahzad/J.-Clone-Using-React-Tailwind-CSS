@@ -28,10 +28,9 @@ const Navbar = ({ onSearchClick = () => {}, onThemeToggle = () => {} }) => {
     ],
     mainLinks: [
       { path: '/new', text: 'New' },
-      { path: '/sync', text: 'Sync', className: 'tracking-widest' },
+      { path: '/Syncc', text: 'Syncc', className: 'tracking-widest' },
       { path: '/cast-crew', text: 'Cast & Crew', className: 'text-gold-500 font-light' },
-      { path: '/featured', text: 'Featured', className: 'text-red-600 font-bold' },
-      { path: '/collection', text: 'Collection', className: 'text-red-600 font-bold' }
+      { path: '/featured', text: 'Featured Collection', className: 'text-red-600 font-bold' },
     ],
     categoryLinks: [
       { path: '/women', text: 'Women' },
@@ -152,6 +151,7 @@ const Navbar = ({ onSearchClick = () => {}, onThemeToggle = () => {} }) => {
 Navbar.propTypes = {
   onSearchClick: PropTypes.func,
   onThemeToggle: PropTypes.func
+
 };
 
 export default memo(Navbar);
